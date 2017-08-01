@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+org.aspectj.ajdt.core.compiler.BuildOptions.showweavemessages=false
+org.aspectj.ajdt.core.compiler.lint.cantFindType=error

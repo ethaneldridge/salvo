@@ -1,0 +1,12 @@
+<aspectj>
+    <aspects>
+		<!-- Of the set of aspects declared to the weaver
+             use aspects matching the type pattern "com..*" for weaving. -->
+    	<!--  <include within="VASSAL..*"/>  -->
+    	<!-- <aspect name="PlayerAspect"/>  -->
+    	<!-- Can't register non-aspect  <aspect name="PlayerAspectAnnotation"/>  -->
+    </aspects>
+	<!-- <weaver options="-verbose">  -->
+	<weaver options="-showWeaveInfo">
+	</weaver>
+</aspectj>
