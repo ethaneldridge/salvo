@@ -49,6 +49,14 @@ public class SalvoGamePiece implements SalvoGameElement {
 		this.stackName = stackName;
 	}
 
+	public SalvoRectangle getDimension() {
+		return dimension;
+	}
+
+	public void setDimension(SalvoRectangle dimension) {
+		this.dimension = dimension;
+	}
+
 	public Location getLocationOld() {
 		return locationOld;
 	}
@@ -70,6 +78,7 @@ public class SalvoGamePiece implements SalvoGameElement {
 	private String imageName;
 	private boolean isVisible = false;
 	private String stackName = null;
+	private SalvoRectangle dimension;
 	private Location locationOld;
 
 	private Location locationNew;
@@ -127,12 +136,13 @@ public class SalvoGamePiece implements SalvoGameElement {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((dimension == null) ? 0 : dimension.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((imageName == null) ? 0 : imageName.hashCode());
 		result = prime * result + (isVisible ? 1231 : 1237);
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((locationNew == null) ? 0 : locationNew.hashCode());
 		result = prime * result + ((locationOld == null) ? 0 : locationOld.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((stackName == null) ? 0 : stackName.hashCode());
 		return result;
 	}
@@ -146,6 +156,11 @@ public class SalvoGamePiece implements SalvoGameElement {
 		if (getClass() != obj.getClass())
 			return false;
 		SalvoGamePiece other = (SalvoGamePiece) obj;
+		if (dimension == null) {
+			if (other.dimension != null)
+				return false;
+		} else if (!dimension.equals(other.dimension))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -158,11 +173,6 @@ public class SalvoGamePiece implements SalvoGameElement {
 			return false;
 		if (isVisible != other.isVisible)
 			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		if (locationNew == null) {
 			if (other.locationNew != null)
 				return false;
@@ -173,6 +183,11 @@ public class SalvoGamePiece implements SalvoGameElement {
 				return false;
 		} else if (!locationOld.equals(other.locationOld))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (stackName == null) {
 			if (other.stackName != null)
 				return false;
@@ -180,5 +195,4 @@ public class SalvoGamePiece implements SalvoGameElement {
 			return false;
 		return true;
 	}
-
 }

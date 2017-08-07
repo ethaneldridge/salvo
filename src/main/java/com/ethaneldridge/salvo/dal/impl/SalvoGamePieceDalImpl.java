@@ -6,6 +6,7 @@ import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
 import com.ethaneldridge.salvo.data.SalvoGamePiece;
 import com.ethaneldridge.salvo.data.SalvoGamePiece.Location;
 import com.ethaneldridge.salvo.data.SalvoPoint;
+import com.ethaneldridge.salvo.data.SalvoRectangle;
 
 import VASSAL.counters.BasicPiece;
 import VASSAL.counters.Decorator;
@@ -39,7 +40,11 @@ public class SalvoGamePieceDalImpl implements SalvoGamePieceDal {
 		salvoGamePiece.setImageName(getGamePieceImageName(gamePiece));
 		salvoGamePiece.setVisible(determineGamePieceVisibility(gamePiece));
 		salvoGamePiece.setStackName(determineGamePieceStackName(gamePiece));
-		
+
+		SalvoRectangle dimension = new SalvoRectangle();
+		dimension.setHeight(gamePiece.boundingBox().height);
+		dimension.setWidth(gamePiece.boundingBox().width);
+		salvoGamePiece.setDimension(dimension);
 		SalvoGamePiece.Location locationOld = buildLocation(gamePiece, BasicPiece.OLD_MAP, BasicPiece.OLD_X, BasicPiece.OLD_Y);
 		salvoGamePiece.setLocationOld(locationOld);
 

@@ -1,5 +1,4 @@
 package com.ethaneldridge.salvo.vassal.membrane;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -39,20 +38,21 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
 		String request = (String) msg;
 		ReferenceCountUtil.release(msg);
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		java.util.Map<String,Object> commandRequest = objectMapper.readValue(request, new TypeReference<java.util.Map<String, Object>>(){});
-		
+
 		java.util.Map.Entry<String, Object> entryMap = commandRequest.entrySet().iterator().next();
 		String key = entryMap.getKey();
-		
+
 		Object value = entryMap.getValue();
-		
+
+		@SuppressWarnings("unchecked")
 		java.util.Map <String, Object> mapValue = (java.util.Map <String, Object>) value;
-		
+
 		String jsonValue = objectMapper.writeValueAsString(mapValue);
 		commandMap.get(key).apply(jsonValue);
-		
+
 		// Wait for the game to update
 		synchronized (vassalEngine) {
 			while (!vassalEngine.isStateReady()) {
@@ -85,26 +85,24 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 	private interface Command<T> {
 		public void apply(T t) throws Exception;
 	}
-	
+
 	private Command<String> postPiece = request -> {
 
 		vassalEngine.setExpectedClicks(1);
-		// Interpret the Object
-		
 		ObjectMapper objectMapper = new ObjectMapper();
-		
+
 		SalvoGamePiece gamePiece = objectMapper.readValue(request, SalvoGamePiece.class);
 		JComponent mapViewOld = vassalMapViewDal.getViewByMapId(gamePiece.getLocationOld().getSalvoMapId());
-		
+
 		double xOldScreen = gamePiece.getLocationOld().getSalvoPoint().getX();// / map.getZoom();
 		double yOldScreen = gamePiece.getLocationOld().getSalvoPoint().getY();// / map.getZoom();
 		int xOld = (int)xOldScreen; // 1010;
 		int yOld = (int)yOldScreen; // 120;
-		
+
 		pressMouse(mapViewOld, xOld, yOld);
 
-		JComponent mapViewNew = vassalMapViewDal.getViewByMapId(gamePiece.getLocationOld().getSalvoMapId());
-		
+		JComponent mapViewNew = vassalMapViewDal.getViewByMapId(gamePiece.getLocationNew().getSalvoMapId());
+
 		double xNewScreen = gamePiece.getLocationNew().getSalvoPoint().getX();// / map.getZoom();
 		double yNewScreen = gamePiece.getLocationNew().getSalvoPoint().getY();// / map.getZoom();
 		int xNew = (int)xNewScreen;
@@ -122,10 +120,8 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 	};
 	
 	private Command<String> postMapDoubleClick = request -> {
-		
-		vassalEngine.setExpectedClicks(2);
 
-		// Interpret the Object
+		vassalEngine.setExpectedClicks(2);
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		SalvoDoubleClick salvoDoubleClick = objectMapper.readValue(request, SalvoDoubleClick.class);
@@ -136,14 +132,14 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		double yNewScreen = salvoDoubleClick.getSalvoPoint().getY();// / map.getZoom();
 		int xNew = (int)xNewScreen;
 		int yNew = (int)yNewScreen;
-		
+
 		doubleClick(mapView, xNew, yNew);
 	};
 
 	private Command<String> postTurnTracker = request -> {
-		
+
 		JFrame playerWindow = GameModule.getGameModule().getFrame(); // This is the PlayerWindow
-		
+
 		final KeyEvent keyEvent = new KeyEvent(
 				playerWindow,
 				KeyEvent.KEY_PRESSED	,
