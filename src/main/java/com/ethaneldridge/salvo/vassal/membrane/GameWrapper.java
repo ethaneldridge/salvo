@@ -24,14 +24,12 @@ public class GameWrapper extends Player {
 	private int port = 3030;
 	public static void main(String[] args) {
 		logger.debug("GameWrapper");
-		
 		try {
 			new GameWrapper(args);
 		} catch (Exception e) {
 			// FIXME: proper exception handling
 			e.printStackTrace();
 		}
-		
 	}
 
 	private GameWrapper(String[] args) throws Exception {
@@ -49,15 +47,15 @@ public class GameWrapper extends Player {
 		vassalEngine.setSalvoGameStateDal(salvoGameStateDal);
 		vassalEngine.connect(port);
 	}
-	
+
 	@Override
 	protected void launch() throws IOException {
 		super.launch();
-		
+
 		vassalEngine.launch();
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(GameWrapper.class);
 	private VassalEngine vassalEngine = VassalEngine.theVassalEngine();
-	
+
 }

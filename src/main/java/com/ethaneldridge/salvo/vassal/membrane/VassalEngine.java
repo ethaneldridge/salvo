@@ -84,34 +84,30 @@ public class VassalEngine {
 	}
 
 	private void startConnectionThread(int port) {
-//		new Thread(() -> {
-			EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
-			EventLoopGroup workerGroup = new NioEventLoopGroup(2);// FIXME
-			try {
-				ServerBootstrap b = new ServerBootstrap(); // (2)
-				//Executors.newCachedThreadPool(2); // FIXME
-				b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class) // (3)
-						.childHandler(new MySocketInitializer())
-						.option(ChannelOption.SO_BACKLOG, 128) // (5)
-						.childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
-	
-				// Bind and start to accept incoming connections.
-				ChannelFuture f;
-				f = b.bind(port).sync(); // (7)
+		EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
+		EventLoopGroup workerGroup = new NioEventLoopGroup(2);// FIXME
+		try {
+			ServerBootstrap b = new ServerBootstrap(); // (2)
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class) // (3)
+					.childHandler(new MySocketInitializer())
+					.option(ChannelOption.SO_BACKLOG, 128) // (5)
+					.childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
 
-				// Wait until the server socket is closed.
-				// In this example, this does not happen, but you can do that to
-				// gracefully
-				// shut down your server.
-				f.channel().closeFuture().sync();
-			} catch (Exception e) {
-				e.printStackTrace(); // FIXME: Better exception handling
-			} finally {
-				workerGroup.shutdownGracefully();
-				bossGroup.shutdownGracefully();
-			}
-//		}).start();
-		
+			// Bind and start to accept incoming connections.
+			ChannelFuture f;
+			f = b.bind(port).sync(); // (7)
+
+			// Wait until the server socket is closed.
+			// In this example, this does not happen, but you can do that to
+			// gracefully
+			// shut down your server.
+			f.channel().closeFuture().sync();
+		} catch (Exception e) {
+			e.printStackTrace(); // FIXME: Better exception handling
+		} finally {
+			workerGroup.shutdownGracefully();
+			bossGroup.shutdownGracefully();
+		}
 	}
 
 	private class MyWindowAdapter extends WindowAdapter {
@@ -126,7 +122,6 @@ public class VassalEngine {
 
 	private SalvoGameStateDal salvoGameStateDal;
 	private static VassalEngine theVassalEngine = new VassalEngine();
-	private static final Logger logger = LoggerFactory.getLogger(VassalEngine.class);
 	private final Object lock = new Object();
 	private boolean isVassalReady = false;
 	private int expectedClicks = 0;

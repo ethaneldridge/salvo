@@ -10,6 +10,12 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 	public void setType(Type type) {
 		this.type = type;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -39,21 +45,23 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 
 	// You might think this would be better as part of the hierarchy, and you would be right.
 	// I'm doing in this way so that it is easier to manage in JavaScript.
-	// Or, easier for me because right not, I'm honestly not comfortable with OO design in javascript.
+	// Or, easier for me because right now, I'm honestly not comfortable with OO design in javascript.
 	public enum Type {
-		PieceWindow,
-		Canvas,
-		TabWidget,
-		PanelWidget,
-		BoxWidget,
-		ListWidget,
-		SalvoGamePiece
+		PIECE_WINDOW,
+		CANVAS,
+		TAB_WIDGET,
+		PANEL_WIDGET,
+		BOX_WIDGET,
+		LIST_WIDGET,
+		PIECE_SLOT,
+		SALVO_GAME_PIECE
 	}
 	private Type type;
+	private String id = "";
 	private String name;
 	private String width;
 	private String height;
-	private List<SalvoGameElement> contents; // Could be a SalvoGamePiecePalette or a GamePiece
+	private List<SalvoGameElement> contents; // Could be a SalvoGamePiecePalette or a SalvoGamePiece
 
 	@Override
 	public int hashCode() {
@@ -61,6 +69,7 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 		int result = 1;
 		result = prime * result + ((contents == null) ? 0 : contents.hashCode());
 		result = prime * result + ((height == null) ? 0 : height.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((width == null) ? 0 : width.hashCode());
@@ -84,6 +93,11 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 			if (other.height != null)
 				return false;
 		} else if (!height.equals(other.height))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (name == null) {
 			if (other.name != null)

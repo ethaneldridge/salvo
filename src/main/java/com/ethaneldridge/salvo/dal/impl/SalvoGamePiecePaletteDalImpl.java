@@ -2,6 +2,7 @@ package com.ethaneldridge.salvo.dal.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,42 +46,46 @@ public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 	}
 
 	private SalvoGameElement buildSalvoGameElementFromWidget(Widget widget) {
-		SalvoGameElement salvoGameElement = null;
+		SalvoGamePiecePalette salvoGamePiecePalette = new SalvoGamePiecePalette();
+		salvoGamePiecePalette.setName(widget.getConfigureName());
 		if (widget instanceof PieceSlot) {
 			PieceSlot pieceSlot = (PieceSlot)widget;
+			salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PIECE_SLOT);
+			salvoGamePiecePalette.setId(pieceSlot.getGpId());
+
 			GamePiece gamePiece = PieceCloner.getInstance().clonePiece(pieceSlot.getPiece());
 			Point offset = new Point(0,0);
 			SalvoGamePiece salvoGamePiece = salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gamePiece, offset);
-			salvoGameElement = salvoGamePiece;
-		} else {
-			SalvoGamePiecePalette salvoGamePiecePalette = new SalvoGamePiecePalette();
-			salvoGameElement = salvoGamePiecePalette;
+			String salvoGamePieceMapId = String.format("%s%s",SalvoGamePiecePalette.Type.PIECE_SLOT, pieceSlot.getGpId());
+			salvoGamePiece.getLocationNew().setSalvoMapId(salvoGamePieceMapId);
 
-			salvoGamePiecePalette.setName(widget.getConfigureName());
-			salvoGamePiecePalette.setWidth(widget.getAttributeValueString(Widget.WIDTH));
-			salvoGamePiecePalette.setHeight(widget.getAttributeValueString(Widget.HEIGHT));
+			salvoGamePiecePalette.setContents(Arrays.asList(new SalvoGamePiece[] {salvoGamePiece}));
+			salvoGamePiecePalette.setWidth(Integer.toString(salvoGamePiece.getDimension().getWidth()));
+			salvoGamePiecePalette.setHeight(Integer.toString(salvoGamePiece.getDimension().getHeight()));
+		} else {
+			String width = widget.getAttributeValueString(Widget.WIDTH);
+			String height = widget.getAttributeValueString(Widget.HEIGHT);
+			salvoGamePiecePalette.setWidth(width);
+			salvoGamePiecePalette.setHeight(height);
+
 			if (widget instanceof TabWidget){
-				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.TabWidget);
+				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.TAB_WIDGET);
 			} else if (widget instanceof PanelWidget) {
-				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PanelWidget);
+				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PANEL_WIDGET);
 			} else if (widget instanceof BoxWidget) {
-				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.BoxWidget);
+				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.BOX_WIDGET);
 			} else if (widget instanceof ListWidget) {
-				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.ListWidget);
+				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.LIST_WIDGET);
 			} else if (widget instanceof PieceWindow) {
-				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PieceWindow);
+				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PIECE_WINDOW);
 			} else {
 				logger.warn("Unknown type of widget");
 			}
-			
 			List<Buildable> buildables = widget.getBuildables();
 			List<SalvoGameElement> salvoGameElements = getSalvoGameElementsFromBuildables (buildables);
-				
-			salvoGameElement.setContents(salvoGameElements);
-
-
+			salvoGamePiecePalette.setContents(salvoGameElements);
 		}
-		return salvoGameElement;
+		return salvoGamePiecePalette;
 	}
 
 	private List<SalvoGameElement> getSalvoGameElementsFromBuildables(List<Buildable> buildables) {
@@ -90,16 +95,14 @@ public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 		for (Buildable buildable : buildables) {
 			if (buildable instanceof Widget) {
 				Widget widget = (Widget)buildable;
-		
+
 				SalvoGameElement salvoGameElement = buildSalvoGameElementFromWidget(widget);
 				salvoGameElements.add(salvoGameElement);
 			}
 		}
-		
 		return salvoGameElements;
 	}
 
 	private SalvoGamePieceDal salvoGamePieceDal;
 	private static final Logger logger = LoggerFactory.getLogger(SalvoGamePiecePaletteDalImpl.class);
-	
 }

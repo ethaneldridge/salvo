@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
 import com.ethaneldridge.salvo.dal.SalvoMapDal;
 import com.ethaneldridge.salvo.data.SalvoGamePiece;
@@ -17,9 +14,6 @@ import com.ethaneldridge.salvo.data.SalvoMap;
 import VASSAL.build.module.Map;
 import VASSAL.build.module.map.BoardPicker;
 import VASSAL.build.module.map.boardPicker.Board;
-import VASSAL.build.module.map.boardPicker.board.MapGrid;
-import VASSAL.build.module.map.boardPicker.board.ZonedGrid;
-import VASSAL.build.module.map.boardPicker.board.mapgrid.Zone;
 import VASSAL.counters.GamePiece;
 import VASSAL.counters.Stack;
 
@@ -36,7 +30,7 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 								.filter(map -> id.equals(map.getId()))
 								.findFirst()
 								.orElse(null);
-		
+
 		SalvoMap salvoMap = buildSalvoMapFromVassalMap(vassalMap);
 		return salvoMap;
 	}
@@ -47,7 +41,6 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 		List<VASSAL.build.module.Map> maps = VASSAL.build.module.Map.getMapList();
 		for (VASSAL.build.module.Map vassalMap : maps) {
 			SalvoMap salvoMap = buildSalvoMapFromVassalMap(vassalMap);
-
 			salvoMaps.add(salvoMap);
 		}
 		return salvoMaps;
@@ -62,7 +55,6 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 
 		List<SalvoGamePiece> salveGamePieces = new ArrayList<>();
 		GamePiece[] gamePieces = vassalMap.getAllPieces();
-		
 		for (GamePiece gp : gamePieces) {
 			if (gp instanceof Stack) {
 				Point offset = new Point(0,0);
@@ -74,7 +66,6 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 					offset.y += STACK_Y_OFFSET;
 				}
 			} else {
-			
 				salveGamePieces.add(salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gp, POINT_NO_OFFSET));
 			}
 		}
@@ -92,26 +83,12 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 
 	private Board getMainMapBoard(Map mainMap) {
 		BoardPicker boardPicker = mainMap.getBoardPicker();
-		//List<Board> boards = boardPicker.getBoardsFromControls();
 		Collection<Board> boards = boardPicker.getSelectedBoards();
 		Board board = boards.iterator().next();
 		return board;
 	}
 
-	private Iterator<Zone> getMainMapZones(Map mainMap) {
-		Iterator<Zone> zones = new ArrayList<Zone>().iterator();
-		Board board = getMainMapBoard(mainMap);
-		MapGrid mapGrid = board.getGrid();
-		if (mapGrid instanceof ZonedGrid) {
-			ZonedGrid zonedGrid = (ZonedGrid)mapGrid;
-			zones = zonedGrid.getZones();
-		}
-		return zones;
-	}
-
 	private SalvoGamePieceDal salvoGamePieceDal;
-	
-	private static final Logger logger = LoggerFactory.getLogger(SalvoMapDalImpl.class);
 
 	private static final Point POINT_NO_OFFSET = new Point(0, 0);
 	private static final int STACK_X_OFFSET = 4;
