@@ -6,14 +6,19 @@ import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
+import com.ethaneldridge.salvo.dal.SalvoMapDal;
+import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 import com.ethaneldridge.salvo.dal.VassalMapViewDal;
 import com.ethaneldridge.salvo.data.SalvoDoubleClick;
 import com.ethaneldridge.salvo.data.SalvoGamePiece;
 import com.ethaneldridge.salvo.data.SalvoGameState;
+import com.ethaneldridge.salvo.data.SalvoMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import VASSAL.build.GameModule;
+import VASSAL.build.module.turn.SalvoTurnTracker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -24,9 +29,11 @@ import io.netty.util.ReferenceCountUtil;
 
 public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
-	public MyServerHandler(VassalMapViewDal vassalMapViewDal) {
-		
+	public MyServerHandler(SalvoMapDal salvoMapDal, VassalMapViewDal vassalMapViewDal, SalvoTurnTrackerDal salvoTurnTrackerDal, SalvoGameStateDal salvoGameStateDal) {
+		this.salvoMapDal = salvoMapDal;
 		this.vassalMapViewDal = vassalMapViewDal;
+		this.salvoTurnTrackerDal = salvoTurnTrackerDal;
+		this.salvoGameStateDal = salvoGameStateDal;
 		
 		commandMap.put("POST_PIECE", postPiece);
 		commandMap.put("GET_GAMESTATE", getGamestate);
@@ -51,7 +58,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		java.util.Map <String, Object> mapValue = (java.util.Map <String, Object>) value;
 
 		String jsonValue = objectMapper.writeValueAsString(mapValue);
-		commandMap.get(key).apply(jsonValue);
+		Object response = commandMap.get(key).apply(jsonValue);
 
 		// Wait for the game to update
 		synchronized (vassalEngine) {
@@ -66,8 +73,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 			}
 			// Get and send current game state;
 			//vassalEngine.resetClicks();
-			SalvoGameState salvoGameState = vassalEngine.getSalvoGameState();
-			String mainMapMediaTypeJson = objectMapper.writeValueAsString(salvoGameState);
+			String mainMapMediaTypeJson = objectMapper.writeValueAsString(response);
 			ByteBuf buffer = Unpooled.copiedBuffer(mainMapMediaTypeJson, CharsetUtil.UTF_8);
 			ctx.writeAndFlush(buffer).addListener(ChannelFutureListener.CLOSE);
 		}
@@ -79,11 +85,14 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		ctx.close();
 	}
 
+	private SalvoMapDal salvoMapDal;
 	private VassalMapViewDal vassalMapViewDal;
+	private SalvoTurnTrackerDal salvoTurnTrackerDal;
+	private SalvoGameStateDal salvoGameStateDal;
 	private static VassalEngine vassalEngine = VassalEngine.theVassalEngine();
 
 	private interface Command<T> {
-		public void apply(T t) throws Exception;
+		public Object apply(T t) throws Exception;
 	}
 
 	private Command<String> postPiece = request -> {
@@ -109,6 +118,9 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		int yNew = (int)yNewScreen;
 
 		releaseMouse (mapViewNew, xNew, yNew, 1);
+		
+		SalvoMap salvoMap = salvoMapDal.getMapById(gamePiece.getLocationNew().getSalvoMapId());
+		return salvoMap;
 	};
 
 	private Command<String> getGamestate = request -> {
@@ -117,6 +129,8 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 			vassalEngine.resetClicks();
 			vassalEngine.notify();
 		}
+		SalvoGameState salvoGameState = salvoGameStateDal.getSalvoGameState();
+		return salvoGameState;
 	};
 	
 	private Command<String> postMapDoubleClick = request -> {
@@ -126,7 +140,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
 		SalvoDoubleClick salvoDoubleClick = objectMapper.readValue(request, SalvoDoubleClick.class);
 
-		JComponent mapView = vassalMapViewDal.getViewByMapId(salvoDoubleClick.getMapId());
+		JComponent mapView = vassalMapViewDal.getViewByMapId(salvoDoubleClick.getSalvoMapId());
 
 		double xNewScreen = salvoDoubleClick.getSalvoPoint().getX();// / map.getZoom();
 		double yNewScreen = salvoDoubleClick.getSalvoPoint().getY();// / map.getZoom();
@@ -134,6 +148,9 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		int yNew = (int)yNewScreen;
 
 		doubleClick(mapView, xNew, yNew);
+		
+		SalvoMap salvoMap = salvoMapDal.getMapById(salvoDoubleClick.getSalvoMapId());
+    return salvoMap;
 	};
 
 	private Command<String> postTurnTracker = request -> {
@@ -150,6 +167,8 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
 		//Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(keyEvent);
 		playerWindow.dispatchEvent(keyEvent);
+		SalvoTurnTracker salvoTurnTracker = salvoTurnTrackerDal.getSalvoTurnTracker();
+		return salvoTurnTracker;
 	};
 
 	private java.util.Map<String, Command<String> > commandMap = new HashMap<>();

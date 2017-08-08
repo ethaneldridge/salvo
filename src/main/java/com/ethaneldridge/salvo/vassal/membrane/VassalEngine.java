@@ -3,12 +3,6 @@ package com.ethaneldridge.salvo.vassal.membrane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
-import com.ethaneldridge.salvo.data.SalvoGameState;
-
 import VASSAL.build.GameModule;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -23,12 +17,7 @@ public class VassalEngine {
 		// Only access is via singleton
 	}
 
-	public void setSalvoGameStateDal(SalvoGameStateDal salvoGameStateDal) {
-		this.salvoGameStateDal = salvoGameStateDal;
-	}
-
-	public SalvoGameState getSalvoGameState() {
-		return salvoGameStateDal.getSalvoGameState();
+	public void setSalvoGameStateDal() {
 	}
 
 	public static VassalEngine theVassalEngine() {
@@ -120,7 +109,6 @@ public class VassalEngine {
 		}
 	}
 
-	private SalvoGameStateDal salvoGameStateDal;
 	private static VassalEngine theVassalEngine = new VassalEngine();
 	private final Object lock = new Object();
 	private boolean isVassalReady = false;

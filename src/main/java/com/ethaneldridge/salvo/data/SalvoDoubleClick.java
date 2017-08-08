@@ -10,12 +10,12 @@ public class SalvoDoubleClick {
 		this.salvoPoint = salvoPoint;
 	}
 
-	public String getMapId() {
-		return mapId;
+	public String getSalvoMapId() {
+		return salvoMapId;
 	}
 
-	public void setMapId(String mapId) {
-		this.mapId = mapId;
+	public void setSalvoMapId(String mapId) {
+		this.salvoMapId = mapId;
 	}
 
 	public SalvoPoint getSalvoPoint() {
@@ -26,14 +26,14 @@ public class SalvoDoubleClick {
 		this.salvoPoint = salvoPoint;
 	}
 
-	private String mapId;
+	private String salvoMapId;
 	private SalvoPoint salvoPoint;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((mapId == null) ? 0 : mapId.hashCode());
+		result = prime * result + ((salvoMapId == null) ? 0 : salvoMapId.hashCode());
 		result = prime * result + ((salvoPoint == null) ? 0 : salvoPoint.hashCode());
 		return result;
 	}
@@ -47,10 +47,10 @@ public class SalvoDoubleClick {
 		if (getClass() != obj.getClass())
 			return false;
 		SalvoDoubleClick other = (SalvoDoubleClick) obj;
-		if (mapId == null) {
-			if (other.mapId != null)
+		if (salvoMapId == null) {
+			if (other.salvoMapId != null)
 				return false;
-		} else if (!mapId.equals(other.mapId))
+		} else if (!salvoMapId.equals(other.salvoMapId))
 			return false;
 		if (salvoPoint == null) {
 			if (other.salvoPoint != null)
