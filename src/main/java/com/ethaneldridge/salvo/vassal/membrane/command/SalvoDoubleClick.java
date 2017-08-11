@@ -1,4 +1,6 @@
-package com.ethaneldridge.salvo.data;
+package com.ethaneldridge.salvo.vassal.membrane.command;
+
+import com.ethaneldridge.salvo.data.SalvoPoint;
 
 public class SalvoDoubleClick {
 

@@ -1,24 +1,27 @@
 package com.ethaneldridge.salvo.vassal.membrane;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-
+import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
+import com.ethaneldridge.salvo.dal.SalvoGamePiecePaletteDal;
 import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
 import com.ethaneldridge.salvo.dal.SalvoMapDal;
 import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 import com.ethaneldridge.salvo.dal.VassalMapViewDal;
-import com.ethaneldridge.salvo.data.SalvoDoubleClick;
-import com.ethaneldridge.salvo.data.SalvoGamePiece;
-import com.ethaneldridge.salvo.data.SalvoGameState;
-import com.ethaneldridge.salvo.data.SalvoMap;
+import com.ethaneldridge.salvo.dal.impl.SalvoGamePieceDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoGamePiecePaletteDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoGameStateDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoMapDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoTurnTrackerDalImpl;
+import com.ethaneldridge.salvo.dal.impl.VassalMapViewDalImpl;
+import com.ethaneldridge.salvo.vassal.membrane.command.Command;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetGamestate;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetSalvoMapById;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostMapDoubleClick;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostPiece;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostTurnTracker;
+import com.ethaneldridge.salvo.vassal.membrane.command.io.Mouse;
+import com.ethaneldridge.salvo.vassal.membrane.command.io.MouseImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import VASSAL.build.GameModule;
-import VASSAL.build.module.turn.SalvoTurnTracker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -29,17 +32,32 @@ import io.netty.util.ReferenceCountUtil;
 
 public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
-	public MyServerHandler(SalvoMapDal salvoMapDal, VassalMapViewDal vassalMapViewDal, SalvoTurnTrackerDal salvoTurnTrackerDal, SalvoGameStateDal salvoGameStateDal) {
-		this.salvoMapDal = salvoMapDal;
-		this.vassalMapViewDal = vassalMapViewDal;
-		this.salvoTurnTrackerDal = salvoTurnTrackerDal;
-		this.salvoGameStateDal = salvoGameStateDal;
-		
-		commandMap.put("POST_PIECE", postPiece);
-		commandMap.put("GET_GAMESTATE", getGamestate);
-		commandMap.put("POST_MAP_DOUBLECLICK", postMapDoubleClick);
-		commandMap.put("POST_TURNTRACKER", postTurnTracker);
+	static {
+		SalvoGamePieceDal salvoGamePieceDal = new SalvoGamePieceDalImpl();
+		SalvoGamePiecePaletteDal salvoGamePiecePaletteDal = new SalvoGamePiecePaletteDalImpl(salvoGamePieceDal);
+
+		MyServerHandler.salvoMapDal = new SalvoMapDalImpl(salvoGamePieceDal);
+		MyServerHandler.vassalMapViewDal = new VassalMapViewDalImpl();
+		MyServerHandler.salvoTurnTrackerDal =new SalvoTurnTrackerDalImpl();
+		MyServerHandler.salvoGameStateDal = new SalvoGameStateDalImpl(MyServerHandler.salvoTurnTrackerDal, MyServerHandler.salvoMapDal, salvoGamePiecePaletteDal);
 	}
+	public enum Actions {
+		POST_PIECE ("POST_PIECE", new CommandPostPiece(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
+		GET_GAMESTATE ("GET_GAMESTATE", new CommandGetGamestate(vassalEngine, salvoGameStateDal)),
+		GET_SALVOMAP_BY_ID ("GET_SALVOMAP_BY_ID", new CommandGetSalvoMapById(vassalEngine, salvoMapDal)),
+		POST_MAP_DOUBLECLICK ("POST_MAP_DOUBLECLICK", new CommandPostMapDoubleClick(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
+		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(salvoTurnTrackerDal));
+		
+		Actions (String value, Command command) {
+			this.command = command;
+		}
+		
+		Object apply(String request) throws Exception{
+			return this.command.apply(request);
+		}
+		private final Command command;
+	}
+
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
@@ -51,6 +69,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
 		java.util.Map.Entry<String, Object> entryMap = commandRequest.entrySet().iterator().next();
 		String key = entryMap.getKey();
+		Actions action = Actions.valueOf(key);
 
 		Object value = entryMap.getValue();
 
@@ -58,7 +77,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		java.util.Map <String, Object> mapValue = (java.util.Map <String, Object>) value;
 
 		String jsonValue = objectMapper.writeValueAsString(mapValue);
-		Object response = commandMap.get(key).apply(jsonValue);
+		Object response = action.apply(jsonValue);
 
 		// Wait for the game to update
 		synchronized (vassalEngine) {
@@ -85,143 +104,10 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		ctx.close();
 	}
 
-	private SalvoMapDal salvoMapDal;
-	private VassalMapViewDal vassalMapViewDal;
-	private SalvoTurnTrackerDal salvoTurnTrackerDal;
-	private SalvoGameStateDal salvoGameStateDal;
+	private static SalvoMapDal salvoMapDal;
+	private static VassalMapViewDal vassalMapViewDal;
+	private static SalvoTurnTrackerDal salvoTurnTrackerDal;
+	private static SalvoGameStateDal salvoGameStateDal;
 	private static VassalEngine vassalEngine = VassalEngine.theVassalEngine();
-
-	private interface Command<T> {
-		public Object apply(T t) throws Exception;
-	}
-
-	private Command<String> postPiece = request -> {
-
-		vassalEngine.setExpectedClicks(1);
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		SalvoGamePiece gamePiece = objectMapper.readValue(request, SalvoGamePiece.class);
-		JComponent mapViewOld = vassalMapViewDal.getViewByMapId(gamePiece.getLocationOld().getSalvoMapId());
-
-		double xOldScreen = gamePiece.getLocationOld().getSalvoPoint().getX();// / map.getZoom();
-		double yOldScreen = gamePiece.getLocationOld().getSalvoPoint().getY();// / map.getZoom();
-		int xOld = (int)xOldScreen; // 1010;
-		int yOld = (int)yOldScreen; // 120;
-
-		pressMouse(mapViewOld, xOld, yOld);
-
-		JComponent mapViewNew = vassalMapViewDal.getViewByMapId(gamePiece.getLocationNew().getSalvoMapId());
-
-		double xNewScreen = gamePiece.getLocationNew().getSalvoPoint().getX();// / map.getZoom();
-		double yNewScreen = gamePiece.getLocationNew().getSalvoPoint().getY();// / map.getZoom();
-		int xNew = (int)xNewScreen;
-		int yNew = (int)yNewScreen;
-
-		releaseMouse (mapViewNew, xNew, yNew, 1);
-		
-		SalvoMap salvoMap = salvoMapDal.getMapById(gamePiece.getLocationNew().getSalvoMapId());
-		return salvoMap;
-	};
-
-	private Command<String> getGamestate = request -> {
-		// No-op...just need to tell the thread to continue
-		synchronized (vassalEngine) {
-			vassalEngine.resetClicks();
-			vassalEngine.notify();
-		}
-		SalvoGameState salvoGameState = salvoGameStateDal.getSalvoGameState();
-		return salvoGameState;
-	};
-	
-	private Command<String> postMapDoubleClick = request -> {
-
-		vassalEngine.setExpectedClicks(2);
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		SalvoDoubleClick salvoDoubleClick = objectMapper.readValue(request, SalvoDoubleClick.class);
-
-		JComponent mapView = vassalMapViewDal.getViewByMapId(salvoDoubleClick.getSalvoMapId());
-
-		double xNewScreen = salvoDoubleClick.getSalvoPoint().getX();// / map.getZoom();
-		double yNewScreen = salvoDoubleClick.getSalvoPoint().getY();// / map.getZoom();
-		int xNew = (int)xNewScreen;
-		int yNew = (int)yNewScreen;
-
-		doubleClick(mapView, xNew, yNew);
-		
-		SalvoMap salvoMap = salvoMapDal.getMapById(salvoDoubleClick.getSalvoMapId());
-    return salvoMap;
-	};
-
-	private Command<String> postTurnTracker = request -> {
-
-		JFrame playerWindow = GameModule.getGameModule().getFrame(); // This is the PlayerWindow
-
-		final KeyEvent keyEvent = new KeyEvent(
-				playerWindow,
-				KeyEvent.KEY_PRESSED	,
-				System.currentTimeMillis(),
-				0,
-				KeyEvent.VK_F6,
-				KeyEvent.CHAR_UNDEFINED);
-
-		//Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(keyEvent);
-		playerWindow.dispatchEvent(keyEvent);
-		SalvoTurnTracker salvoTurnTracker = salvoTurnTrackerDal.getSalvoTurnTracker();
-		return salvoTurnTracker;
-	};
-
-	private java.util.Map<String, Command<String> > commandMap = new HashMap<>();
-
-	private void doubleClick(JComponent mapView, int x, int y) {
-
-		// clickMouse is irrelevant.  Doesn't hurt, but isn't needed.
-		pressMouse(mapView, x, y);
-		releaseMouse(mapView, x, y, 1);
-
-		pressMouse(mapView, x, y);
-		releaseMouse(mapView, x, y, 2);
-	}
-
-	private void pressMouse(JComponent mapView, int xOld, int yOld) {
-		final MouseEvent mousePressedEvent = new MouseEvent(
-				mapView, //playerWindow
-				MouseEvent.MOUSE_PRESSED,
-				System.currentTimeMillis(),
-				0,
-				xOld,
-				yOld,
-				1,
-				false,
-				MouseEvent.BUTTON1);
-		mapView.dispatchEvent(mousePressedEvent);
-	}
-
-	private void releaseMouse(JComponent mapView, int x, int y, int clicks) {
-		final MouseEvent mouseReleasedEvent = new MouseEvent(
-				mapView, // playerWindow
-				MouseEvent.MOUSE_RELEASED,
-				System.currentTimeMillis(),
-				0,
-				x,
-				y,
-				clicks,
-				false,
-				MouseEvent.BUTTON1);
-		mapView.dispatchEvent(mouseReleasedEvent);
-	}
-
-	private void clickMouse(JComponent mapView, int x, int y, int clicks) {
-		final MouseEvent mouseClickedOnce = new MouseEvent(
-				mapView, // playerWindow
-				MouseEvent.MOUSE_CLICKED,
-				System.currentTimeMillis(),
-				0,
-				x,
-				y,
-				clicks,
-				false,
-				MouseEvent.BUTTON1);
-		mapView.dispatchEvent(mouseClickedOnce);
-	}
+	private static Mouse mouse = new MouseImpl();
 }

@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.ethaneldridge.salvo.data.SalvoDoubleClick;
 import com.ethaneldridge.salvo.data.SalvoPoint;
+import com.ethaneldridge.salvo.vassal.membrane.command.SalvoDoubleClick;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SalvoDoubleClickTest {
