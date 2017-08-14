@@ -9,9 +9,9 @@ import com.ethaneldridge.salvo.vassal.membrane.VassalEngine;
 import com.ethaneldridge.salvo.vassal.membrane.command.io.Mouse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CommandPostMapDoubleClick implements Command {
+public class CommandPostLeftDoubleClick implements Command {
 
-	public CommandPostMapDoubleClick (VassalEngine vassalEngine, SalvoMapDal salvoMapDal, VassalMapViewDal vassalMapViewDal, Mouse mouse) {
+	public CommandPostLeftDoubleClick (VassalEngine vassalEngine, SalvoMapDal salvoMapDal, VassalMapViewDal vassalMapViewDal, Mouse mouse) {
 		this.vassalEngine = vassalEngine;
 		this.salvoMapDal = salvoMapDal;
 		this.vassalMapViewDal = vassalMapViewDal;
@@ -22,9 +22,9 @@ public class CommandPostMapDoubleClick implements Command {
 		vassalEngine.setExpectedClicks(2);
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		SalvoDoubleClick salvoDoubleClick = objectMapper.readValue(request, SalvoDoubleClick.class);
+		SalvoLeftDoubleClick salvoDoubleClick = objectMapper.readValue(request, SalvoLeftDoubleClick.class);
 
-		JComponent mapView = vassalMapViewDal.getViewByMapId(salvoDoubleClick.getSalvoMapId());
+		JComponent mapView = vassalMapViewDal.getViewByMapId(salvoDoubleClick.getTargetId());
 
 		double xNewScreen = salvoDoubleClick.getSalvoPoint().getX();// / map.getZoom();
 		double yNewScreen = salvoDoubleClick.getSalvoPoint().getY();// / map.getZoom();
@@ -33,7 +33,7 @@ public class CommandPostMapDoubleClick implements Command {
 
 		mouse.doubleClick(mapView, xNew, yNew);
 
-		SalvoMap salvoMap = salvoMapDal.getMapById(salvoDoubleClick.getSalvoMapId());
+		SalvoMap salvoMap = salvoMapDal.getMapById(salvoDoubleClick.getTargetId());
 		return salvoMap;
 	}
 

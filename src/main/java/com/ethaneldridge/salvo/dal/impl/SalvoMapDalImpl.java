@@ -53,7 +53,7 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 		salvoMap.setImageName(getMainMapImageName(vassalMap));
 		salvoMap.setZoom(vassalMap.getZoom());
 
-		List<SalvoGamePiece> salveGamePieces = new ArrayList<>();
+		List<SalvoGamePiece> salvoGamePieces = new ArrayList<>();
 		GamePiece[] gamePieces = vassalMap.getAllPieces();
 		for (GamePiece gp : gamePieces) {
 			if (gp instanceof Stack) {
@@ -61,16 +61,16 @@ public class SalvoMapDalImpl implements SalvoMapDal {
 				Iterator<GamePiece> iterator = ((Stack) gp).getPiecesIterator();
 				while(iterator.hasNext()) {
 					GamePiece gamePiece = iterator.next();
-					salveGamePieces.add(salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gamePiece, offset));
+					salvoGamePieces.add(salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gamePiece, offset));
 					offset.x += STACK_X_OFFSET;
 					offset.y += STACK_Y_OFFSET;
 				}
 			} else {
-				salveGamePieces.add(salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gp, POINT_NO_OFFSET));
+				salvoGamePieces.add(salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gp, POINT_NO_OFFSET));
 			}
 		}
 		
-		salvoMap.setPieces(salveGamePieces);
+		salvoMap.setPieces(salvoGamePieces);
 
 		return salvoMap;
 	}

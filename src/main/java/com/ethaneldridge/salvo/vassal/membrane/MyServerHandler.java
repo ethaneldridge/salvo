@@ -3,18 +3,23 @@ import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
 import com.ethaneldridge.salvo.dal.SalvoGamePiecePaletteDal;
 import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
 import com.ethaneldridge.salvo.dal.SalvoMapDal;
+import com.ethaneldridge.salvo.dal.SalvoToolbarMenuDal;
+import com.ethaneldridge.salvo.dal.SalvoToolbarMenuItemDal;
 import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 import com.ethaneldridge.salvo.dal.VassalMapViewDal;
 import com.ethaneldridge.salvo.dal.impl.SalvoGamePieceDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGamePiecePaletteDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGameStateDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoMapDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoToolbarMenuDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoToolbarMenuItemDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoTurnTrackerDalImpl;
 import com.ethaneldridge.salvo.dal.impl.VassalMapViewDalImpl;
 import com.ethaneldridge.salvo.vassal.membrane.command.Command;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetGamestate;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetSalvoMapById;
-import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostMapDoubleClick;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetToolbarMenu;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostLeftDoubleClick;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostPiece;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostTurnTracker;
 import com.ethaneldridge.salvo.vassal.membrane.command.io.Mouse;
@@ -35,18 +40,21 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 	static {
 		SalvoGamePieceDal salvoGamePieceDal = new SalvoGamePieceDalImpl();
 		SalvoGamePiecePaletteDal salvoGamePiecePaletteDal = new SalvoGamePiecePaletteDalImpl(salvoGamePieceDal);
+		SalvoToolbarMenuItemDal salvoToolbarMenuItemDal = new SalvoToolbarMenuItemDalImpl();
 
 		MyServerHandler.salvoMapDal = new SalvoMapDalImpl(salvoGamePieceDal);
 		MyServerHandler.vassalMapViewDal = new VassalMapViewDalImpl();
 		MyServerHandler.salvoTurnTrackerDal =new SalvoTurnTrackerDalImpl();
 		MyServerHandler.salvoGameStateDal = new SalvoGameStateDalImpl(MyServerHandler.salvoTurnTrackerDal, MyServerHandler.salvoMapDal, salvoGamePiecePaletteDal);
+		MyServerHandler.salvoToolbarMenuDal = new SalvoToolbarMenuDalImpl(salvoToolbarMenuItemDal);
 	}
 	public enum Actions {
 		POST_PIECE ("POST_PIECE", new CommandPostPiece(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
 		GET_GAMESTATE ("GET_GAMESTATE", new CommandGetGamestate(vassalEngine, salvoGameStateDal)),
 		GET_SALVOMAP_BY_ID ("GET_SALVOMAP_BY_ID", new CommandGetSalvoMapById(vassalEngine, salvoMapDal)),
-		POST_MAP_DOUBLECLICK ("POST_MAP_DOUBLECLICK", new CommandPostMapDoubleClick(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
-		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(salvoTurnTrackerDal));
+		POST_LEFT_DOUBLE_CLICK ("POST_LEFT_DOUBLE_CLICK", new CommandPostLeftDoubleClick(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
+		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(salvoTurnTrackerDal)),
+		GET_TOOLBAR_MENU ("GET_TOOLBAR_MENU", new CommandGetToolbarMenu(vassalEngine, salvoToolbarMenuDal));
 		
 		Actions (String value, Command command) {
 			this.command = command;
@@ -108,6 +116,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 	private static VassalMapViewDal vassalMapViewDal;
 	private static SalvoTurnTrackerDal salvoTurnTrackerDal;
 	private static SalvoGameStateDal salvoGameStateDal;
+	private static SalvoToolbarMenuDal salvoToolbarMenuDal;
 	private static VassalEngine vassalEngine = VassalEngine.theVassalEngine();
 	private static Mouse mouse = new MouseImpl();
 }
