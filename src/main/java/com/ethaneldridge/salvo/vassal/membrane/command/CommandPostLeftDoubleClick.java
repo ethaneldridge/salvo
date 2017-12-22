@@ -33,7 +33,7 @@ public class CommandPostLeftDoubleClick implements Command {
 
 		mouse.doubleClick(mapView, xNew, yNew);
 
-		SalvoMap salvoMap = salvoMapDal.getMapById(salvoDoubleClick.getTargetId());
+		SalvoMap salvoMap = salvoMapDal.getById(salvoDoubleClick.getTargetId());
 		return salvoMap;
 	}
 

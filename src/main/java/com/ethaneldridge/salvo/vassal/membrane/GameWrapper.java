@@ -35,5 +35,4 @@ public class GameWrapper extends Player {
 
 	private static final Logger logger = LoggerFactory.getLogger(GameWrapper.class);
 	private VassalEngine vassalEngine = VassalEngine.theVassalEngine();
-
 }

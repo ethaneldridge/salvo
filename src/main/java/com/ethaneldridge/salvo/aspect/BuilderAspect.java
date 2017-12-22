@@ -22,7 +22,11 @@ public class BuilderAspect {
 		Document document = e.getOwnerDocument();
 		String elementName = e.getTagName();
 		if ("VASSAL.build.module.turn.TurnTracker".equals(elementName)) {
-			document.renameNode(e, e.getNamespaceURI(), "VASSAL.build.module.turn.SalvoTurnTracker");
+			document.renameNode(e, e.getNamespaceURI(), "VASSAL.build.module.turn.VassalSalvoTurnTracker");
+			System.out.println(String.format("Renamed element from [%s] to [%s]", elementName, e.getTagName()));
+			args[0] = e;
+		} else if ("VASSAL.build.module.ToolbarMenu".equals(elementName)) {
+			document.renameNode(e, e.getNamespaceURI(), "VASSAL.build.module.VassalSalvoToolbarMenu");
 			System.out.println(String.format("Renamed element from [%s] to [%s]", elementName, e.getTagName()));
 			args[0] = e;
 		}

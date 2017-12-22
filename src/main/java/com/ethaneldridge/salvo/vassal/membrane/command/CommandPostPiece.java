@@ -43,7 +43,7 @@ public class CommandPostPiece implements Command {
 
 		mouse.releaseMouse (mapViewNew, xNew, yNew, 1);
 		
-		SalvoMap salvoMap = salvoMapDal.getMapById(gamePiece.getLocationNew().getSalvoMapId());
+		SalvoMap salvoMap = salvoMapDal.getById(gamePiece.getLocationNew().getSalvoMapId());
 		return salvoMap;
 	}
 

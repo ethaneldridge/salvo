@@ -16,12 +16,13 @@ public class CommandGetSalvoMapById implements Command {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		HttpGetRequest httpGetRequest = objectMapper.readValue(request, HttpGetRequest.class);
-		
+		// Some commands trigger a game activity.
+		// This one doesn't.  Just need to tell the thread to continue
 		synchronized (vassalEngine) {
 			vassalEngine.resetClicks();
 			vassalEngine.notify();
 		}
-		SalvoMap salvoMap = salvoMapDal.getMapById((String)httpGetRequest.getQueryParameters().get("id"));
+		SalvoMap salvoMap = salvoMapDal.getById((String)httpGetRequest.getQueryParameters().get("id"));
 		return salvoMap;
 	}
 

@@ -2,7 +2,7 @@ package com.ethaneldridge.salvo.data;
 
 import java.util.List;
 
-import VASSAL.build.module.turn.SalvoTurnTracker;
+import VASSAL.build.module.turn.VassalSalvoTurnTracker;
 
 public class SalvoGameState {
 
@@ -10,17 +10,17 @@ public class SalvoGameState {
 		// Required for Jackson instantiation
 	}
 
-	public SalvoGameState(SalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
+	public SalvoGameState(VassalSalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
 		this.salvoTurnTracker = salvoTurnTracker;
 		this.salvoMaps = salvoMapAll;
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
 	}
 
-	public SalvoTurnTracker getSalvoTurnTracker() {
+	public VassalSalvoTurnTracker getSalvoTurnTracker() {
 		return salvoTurnTracker;
 	}
 
-	public void setSalvoTurnTracker(SalvoTurnTracker salvoTurnTracker) {
+	public void setSalvoTurnTracker(VassalSalvoTurnTracker salvoTurnTracker) {
 		this.salvoTurnTracker = salvoTurnTracker;
 	}
 
@@ -40,7 +40,7 @@ public class SalvoGameState {
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
 	}
 
-	private SalvoTurnTracker salvoTurnTracker;
+	private VassalSalvoTurnTracker salvoTurnTracker;
 	private List<SalvoMap> salvoMaps;
 	private List<SalvoGameElement> salvoGamePiecePalettes;
 	

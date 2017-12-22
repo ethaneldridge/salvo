@@ -6,6 +6,7 @@ import com.ethaneldridge.salvo.data.SalvoMap;
 
 public interface SalvoMapDal {
 
-	SalvoMap getMapById(String id);
-	List<SalvoMap> searchAll();
+	public SalvoMap getById(String id);
+	public SalvoMap getMain();
+	public List<SalvoMap> searchAll();
 }

@@ -5,13 +5,13 @@ import java.util.List;
 import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 
 import VASSAL.build.GameModule;
-import VASSAL.build.module.turn.SalvoTurnTracker;
+import VASSAL.build.module.turn.VassalSalvoTurnTracker;
 
 public class SalvoTurnTrackerDalImpl implements SalvoTurnTrackerDal {
 
 	@Override
-	public SalvoTurnTracker getSalvoTurnTracker() {
-		List<SalvoTurnTracker> components = GameModule.getGameModule().getComponentsOf(SalvoTurnTracker.class);
+	public VassalSalvoTurnTracker getSalvoTurnTracker() {
+		List<VassalSalvoTurnTracker> components = GameModule.getGameModule().getComponentsOf(VassalSalvoTurnTracker.class);
 		return components.stream().findFirst().get();
 	}
 

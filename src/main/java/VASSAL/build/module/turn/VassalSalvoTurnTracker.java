@@ -2,10 +2,10 @@ package VASSAL.build.module.turn;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = SalvoTurnTrackerSerializer.class)
-public class SalvoTurnTracker extends TurnTracker {
+@JsonSerialize(using = VassalSalvoTurnTrackerSerializer.class)
+public class VassalSalvoTurnTracker extends TurnTracker {
 
-	public SalvoTurnTracker() {
+	public VassalSalvoTurnTracker() {
 		super();
 	}
 	

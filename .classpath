@@ -3,61 +3,238 @@
 	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/Vengine.jar" sourcepath="/vassal-salvo">
-		<attributes>
-			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-anim.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-awt-util.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-bridge.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-codec.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-css.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-dom.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-ext.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-extension.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-gui-util.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-gvt.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-parser.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-script.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-svg-dom.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-svggen.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-swing.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-transcoder.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-util.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/batik-xml.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/BrowserLauncher2-1_3.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/commons-compiler.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/commons-io-2.2.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/guava-r06.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/janino.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/java-getopt-1.0.13.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/jl1.0.1.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/logback-classic-1.1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/logback-core-1.1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/miglayout-core-4.2.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/miglayout-swing-4.2ju.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/slf4j-api-1.7.7.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/smack.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/smackx-debug.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/smackx.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/swing-layout-1.0.3.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/swing-worker-1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/swingx-0.9.4.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/TimingFramework-1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/wizard.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/xalan-2.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/xml-apis-ext.jar"/>
-	<classpathentry kind="lib" path="/Users/ethael/development/vassal.binaries/VASSAL-3.2.17/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/netty-all-4.1.11.Final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.8.9.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.8.9.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind-2.8.9.jar"/>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-anim.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-awt-util.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-bridge.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-codec.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-css.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-dom.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-ext.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-extension.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-gui-util.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-gvt.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-parser.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-script.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-svg-dom.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-svggen.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-swing.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-transcoder.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-util.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/batik-xml.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/BrowserLauncher2-1_3.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/commons-codec-1.6.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/commons-compiler.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/commons-io-2.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/commons-lang-2.5.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/guava-r06.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/janino.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/java-getopt-1.0.13.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/jl1.0.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/logback-classic-1.1.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/logback-core-1.1.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/miglayout-core-4.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/miglayout-swing-4.2ju.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/slf4j-api-1.7.7.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/smack.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/smackx-debug.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/smackx.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/swing-layout-1.0.3.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/swing-worker-1.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/swingx-0.9.4.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/TimingFramework-1.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/Vengine" sourcepath="/vassal/src"/>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/Vengine.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/wizard.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/xalan-2.6.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/xercesImpl.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/xml-apis-ext.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ethael/development/VASSAL-3.2.17/lib/xml-apis.jar">
+		<attributes>
+			<attribute name="org.eclipse.ajdt.inpath" value="org.eclipse.ajdt.inpath"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/netty-all-4.1.14.Final.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

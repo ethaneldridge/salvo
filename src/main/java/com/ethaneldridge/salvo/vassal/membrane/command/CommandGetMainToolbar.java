@@ -1,15 +1,15 @@
 package com.ethaneldridge.salvo.vassal.membrane.command;
 
-import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
-import com.ethaneldridge.salvo.data.SalvoGameState;
+import com.ethaneldridge.salvo.dal.SalvoMapDal;
 import com.ethaneldridge.salvo.vassal.membrane.VassalEngine;
 
-public class CommandGetGamestate implements Command {
+public class CommandGetMainToolbar implements Command {
 
-	public CommandGetGamestate (VassalEngine vassalEngine, SalvoGameStateDal salvoGameStateDal) {
+	public CommandGetMainToolbar(VassalEngine vassalEngine, SalvoMapDal salvoMapDal) {
 		this.vassalEngine = vassalEngine;
-		this.salvoGameStateDal = salvoGameStateDal;
+		this.salvoMapDal = salvoMapDal;
 	}
+
 	@Override
 	public Object apply(String request) throws Exception {
 		// Some commands trigger a game activity.
@@ -18,9 +18,11 @@ public class CommandGetGamestate implements Command {
 			vassalEngine.resetClicks();
 			vassalEngine.notify();
 		}
-		SalvoGameState salvoGameState = salvoGameStateDal.getSalvoGameState();
-		return salvoGameState;
+		
+//		return salvoMapDal.getMain().getSalvoToolbar();
+		return vassalEngine.getVassalRepository().searchAllSalvoToolbars();
 	}
+
 	private final VassalEngine vassalEngine;
-	private final SalvoGameStateDal salvoGameStateDal;
+	private final SalvoMapDal salvoMapDal;
 }

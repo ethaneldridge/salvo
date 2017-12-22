@@ -6,20 +6,20 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-public class SalvoTurnTrackerSerializer extends StdSerializer<SalvoTurnTracker> {
+public class VassalSalvoTurnTrackerSerializer extends StdSerializer<VassalSalvoTurnTracker> {
 
 	private static final long serialVersionUID = 1L;
 
-	public SalvoTurnTrackerSerializer() {
+	public VassalSalvoTurnTrackerSerializer() {
 		this(null);
 	}
 
-	public SalvoTurnTrackerSerializer(Class<SalvoTurnTracker> t) {
+	public VassalSalvoTurnTrackerSerializer(Class<VassalSalvoTurnTracker> t) {
 		super(t);
 	}
 
 	@Override
-	public void serialize(SalvoTurnTracker value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+	public void serialize(VassalSalvoTurnTracker value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
 		jgen.writeStartObject();
 		jgen.writeStringField("turnDescription", value.getTurnDescription());
 		jgen.writeEndObject();

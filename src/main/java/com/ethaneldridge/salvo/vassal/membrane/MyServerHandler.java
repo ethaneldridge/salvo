@@ -1,24 +1,25 @@
 package com.ethaneldridge.salvo.vassal.membrane;
-import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
+import com.ethaneldridge.salvo.dal.SalvoChatDal;
 import com.ethaneldridge.salvo.dal.SalvoGamePiecePaletteDal;
 import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
 import com.ethaneldridge.salvo.dal.SalvoMapDal;
-import com.ethaneldridge.salvo.dal.SalvoToolbarMenuDal;
-import com.ethaneldridge.salvo.dal.SalvoToolbarMenuItemDal;
+import com.ethaneldridge.salvo.dal.SalvoToolbarDal;
 import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 import com.ethaneldridge.salvo.dal.VassalMapViewDal;
-import com.ethaneldridge.salvo.dal.impl.SalvoGamePieceDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoChatDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGamePiecePaletteDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGameStateDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoMapDalImpl;
-import com.ethaneldridge.salvo.dal.impl.SalvoToolbarMenuDalImpl;
-import com.ethaneldridge.salvo.dal.impl.SalvoToolbarMenuItemDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoToolbarDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoTurnTrackerDalImpl;
 import com.ethaneldridge.salvo.dal.impl.VassalMapViewDalImpl;
+import com.ethaneldridge.salvo.data.SalvoChat;
+import com.ethaneldridge.salvo.data.SalvoToolbar;
 import com.ethaneldridge.salvo.vassal.membrane.command.Command;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetChats;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetGamestate;
+import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetMainToolbar;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetSalvoMapById;
-import com.ethaneldridge.salvo.vassal.membrane.command.CommandGetToolbarMenu;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostLeftDoubleClick;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostPiece;
 import com.ethaneldridge.salvo.vassal.membrane.command.CommandPostTurnTracker;
@@ -26,6 +27,7 @@ import com.ethaneldridge.salvo.vassal.membrane.command.io.Mouse;
 import com.ethaneldridge.salvo.vassal.membrane.command.io.MouseImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -38,28 +40,31 @@ import io.netty.util.ReferenceCountUtil;
 public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
 	static {
-		SalvoGamePieceDal salvoGamePieceDal = new SalvoGamePieceDalImpl();
-		SalvoGamePiecePaletteDal salvoGamePiecePaletteDal = new SalvoGamePiecePaletteDalImpl(salvoGamePieceDal);
-		SalvoToolbarMenuItemDal salvoToolbarMenuItemDal = new SalvoToolbarMenuItemDalImpl();
+		// Sequence here is important.  Need the vassalEngine before calling methods on it.
+		MyServerHandler.vassalEngine = VassalEngine.theVassalEngine();
+		VassalRepository vassalRepository = MyServerHandler.vassalEngine.getVassalRepository();
+		SalvoGamePiecePaletteDal salvoGamePiecePaletteDal = new SalvoGamePiecePaletteDalImpl(vassalRepository);
 
-		MyServerHandler.salvoMapDal = new SalvoMapDalImpl(salvoGamePieceDal);
+		MyServerHandler.salvoToolbarMenuDal = new SalvoToolbarDalImpl(vassalRepository);
+		MyServerHandler.salvoMapDal = new SalvoMapDalImpl(vassalRepository);
 		MyServerHandler.vassalMapViewDal = new VassalMapViewDalImpl();
-		MyServerHandler.salvoTurnTrackerDal =new SalvoTurnTrackerDalImpl();
+		MyServerHandler.salvoTurnTrackerDal = new SalvoTurnTrackerDalImpl();
 		MyServerHandler.salvoGameStateDal = new SalvoGameStateDalImpl(MyServerHandler.salvoTurnTrackerDal, MyServerHandler.salvoMapDal, salvoGamePiecePaletteDal);
-		MyServerHandler.salvoToolbarMenuDal = new SalvoToolbarMenuDalImpl(salvoToolbarMenuItemDal);
+		MyServerHandler.salvoChatDal = new SalvoChatDalImpl();
 	}
 	public enum Actions {
 		POST_PIECE ("POST_PIECE", new CommandPostPiece(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
 		GET_GAMESTATE ("GET_GAMESTATE", new CommandGetGamestate(vassalEngine, salvoGameStateDal)),
 		GET_SALVOMAP_BY_ID ("GET_SALVOMAP_BY_ID", new CommandGetSalvoMapById(vassalEngine, salvoMapDal)),
 		POST_LEFT_DOUBLE_CLICK ("POST_LEFT_DOUBLE_CLICK", new CommandPostLeftDoubleClick(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
-		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(salvoTurnTrackerDal)),
-		GET_TOOLBAR_MENU ("GET_TOOLBAR_MENU", new CommandGetToolbarMenu(vassalEngine, salvoToolbarMenuDal));
-		
+		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(vassalEngine, salvoTurnTrackerDal)),
+		GET_TOOLBARS ("GET_TOOLBARS", new CommandGetMainToolbar(vassalEngine, salvoMapDal)),
+		GET_CHATS ("GET_CHATS", new CommandGetChats(vassalEngine, salvoChatDal));
+
 		Actions (String value, Command command) {
 			this.command = command;
 		}
-		
+
 		Object apply(String request) throws Exception{
 			return this.command.apply(request);
 		}
@@ -73,6 +78,11 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		ReferenceCountUtil.release(msg);
 
 		ObjectMapper objectMapper = new ObjectMapper();
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(SalvoToolbar.class, new SalvoToolbarSerializer());
+		module.addSerializer(SalvoChat.class, new SalvoChatSerializer());
+		objectMapper.registerModule(module);
+
 		java.util.Map<String,Object> commandRequest = objectMapper.readValue(request, new TypeReference<java.util.Map<String, Object>>(){});
 
 		java.util.Map.Entry<String, Object> entryMap = commandRequest.entrySet().iterator().next();
@@ -112,11 +122,13 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		ctx.close();
 	}
 
+	private static VassalEngine vassalEngine;
+	private static Mouse mouse = new MouseImpl();
 	private static SalvoMapDal salvoMapDal;
 	private static VassalMapViewDal vassalMapViewDal;
 	private static SalvoTurnTrackerDal salvoTurnTrackerDal;
 	private static SalvoGameStateDal salvoGameStateDal;
-	private static SalvoToolbarMenuDal salvoToolbarMenuDal;
-	private static VassalEngine vassalEngine = VassalEngine.theVassalEngine();
-	private static Mouse mouse = new MouseImpl();
+	private static SalvoToolbarDal salvoToolbarMenuDal;
+	private static SalvoChatDal salvoChatDal;
+
 }
