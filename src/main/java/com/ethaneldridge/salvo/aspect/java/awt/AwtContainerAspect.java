@@ -1,4 +1,4 @@
-package com.ethaneldridge.salvo.aspect;
+package com.ethaneldridge.salvo.aspect.java.awt;
 
 import javax.swing.JToolBar;
 

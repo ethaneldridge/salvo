@@ -10,7 +10,8 @@ public class SalvoGameState {
 		// Required for Jackson instantiation
 	}
 
-	public SalvoGameState(VassalSalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
+	public SalvoGameState(SalvoModuleMetaData salvoModuleMetaData, VassalSalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
+		this.salvoModuleMetaData = salvoModuleMetaData;
 		this.salvoTurnTracker = salvoTurnTracker;
 		this.salvoMaps = salvoMapAll;
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
@@ -40,6 +41,15 @@ public class SalvoGameState {
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
 	}
 
+	public SalvoModuleMetaData getSalvoModuleMetaData() {
+		return salvoModuleMetaData;
+	}
+
+	public void setSalvoModuleMetaData(SalvoModuleMetaData salvoModuleMetaData) {
+		this.salvoModuleMetaData = salvoModuleMetaData;
+	}
+
+	private SalvoModuleMetaData salvoModuleMetaData;
 	private VassalSalvoTurnTracker salvoTurnTracker;
 	private List<SalvoMap> salvoMaps;
 	private List<SalvoGameElement> salvoGamePiecePalettes;
@@ -50,6 +60,7 @@ public class SalvoGameState {
 		int result = 1;
 		result = prime * result + ((salvoGamePiecePalettes == null) ? 0 : salvoGamePiecePalettes.hashCode());
 		result = prime * result + ((salvoMaps == null) ? 0 : salvoMaps.hashCode());
+		result = prime * result + ((salvoModuleMetaData == null) ? 0 : salvoModuleMetaData.hashCode());
 		result = prime * result + ((salvoTurnTracker == null) ? 0 : salvoTurnTracker.hashCode());
 		return result;
 	}
@@ -72,6 +83,11 @@ public class SalvoGameState {
 			if (other.salvoMaps != null)
 				return false;
 		} else if (!salvoMaps.equals(other.salvoMaps))
+			return false;
+		if (salvoModuleMetaData == null) {
+			if (other.salvoModuleMetaData != null)
+				return false;
+		} else if (!salvoModuleMetaData.equals(other.salvoModuleMetaData))
 			return false;
 		if (salvoTurnTracker == null) {
 			if (other.salvoTurnTracker != null)

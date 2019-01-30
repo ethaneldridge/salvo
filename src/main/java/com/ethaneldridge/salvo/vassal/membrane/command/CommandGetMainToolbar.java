@@ -1,13 +1,11 @@
 package com.ethaneldridge.salvo.vassal.membrane.command;
 
-import com.ethaneldridge.salvo.dal.SalvoMapDal;
 import com.ethaneldridge.salvo.vassal.membrane.VassalEngine;
 
 public class CommandGetMainToolbar implements Command {
 
-	public CommandGetMainToolbar(VassalEngine vassalEngine, SalvoMapDal salvoMapDal) {
+	public CommandGetMainToolbar(VassalEngine vassalEngine) {
 		this.vassalEngine = vassalEngine;
-		this.salvoMapDal = salvoMapDal;
 	}
 
 	@Override
@@ -24,5 +22,4 @@ public class CommandGetMainToolbar implements Command {
 	}
 
 	private final VassalEngine vassalEngine;
-	private final SalvoMapDal salvoMapDal;
 }

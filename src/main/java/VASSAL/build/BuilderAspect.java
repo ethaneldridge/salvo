@@ -1,4 +1,4 @@
-package com.ethaneldridge.salvo.aspect;
+package VASSAL.build;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

@@ -1,8 +1,11 @@
 package com.ethaneldridge.salvo.vassal.membrane.command;
 
 import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
+import com.ethaneldridge.salvo.data.SalvoGamePiece;
 import com.ethaneldridge.salvo.data.SalvoGameState;
+import com.ethaneldridge.salvo.data.SalvoPlayer;
 import com.ethaneldridge.salvo.vassal.membrane.VassalEngine;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CommandGetGamestate implements Command {
 
@@ -18,7 +21,12 @@ public class CommandGetGamestate implements Command {
 			vassalEngine.resetClicks();
 			vassalEngine.notify();
 		}
-		SalvoGameState salvoGameState = salvoGameStateDal.getSalvoGameState();
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		SalvoPlayer player = objectMapper.readValue(request, SalvoPlayer.class);
+		
+		SalvoGameState salvoGameState = salvoGameStateDal.getSalvoGameStateByPlayer(player);
 		return salvoGameState;
 	}
 	private final VassalEngine vassalEngine;

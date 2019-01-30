@@ -3,6 +3,7 @@ import com.ethaneldridge.salvo.dal.SalvoChatDal;
 import com.ethaneldridge.salvo.dal.SalvoGamePiecePaletteDal;
 import com.ethaneldridge.salvo.dal.SalvoGameStateDal;
 import com.ethaneldridge.salvo.dal.SalvoMapDal;
+import com.ethaneldridge.salvo.dal.SalvoModuleMetaDataDal;
 import com.ethaneldridge.salvo.dal.SalvoToolbarDal;
 import com.ethaneldridge.salvo.dal.SalvoTurnTrackerDal;
 import com.ethaneldridge.salvo.dal.VassalMapViewDal;
@@ -10,6 +11,7 @@ import com.ethaneldridge.salvo.dal.impl.SalvoChatDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGamePiecePaletteDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoGameStateDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoMapDalImpl;
+import com.ethaneldridge.salvo.dal.impl.SalvoModuleMetaDataDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoToolbarDalImpl;
 import com.ethaneldridge.salvo.dal.impl.SalvoTurnTrackerDalImpl;
 import com.ethaneldridge.salvo.dal.impl.VassalMapViewDalImpl;
@@ -44,12 +46,13 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		MyServerHandler.vassalEngine = VassalEngine.theVassalEngine();
 		VassalRepository vassalRepository = MyServerHandler.vassalEngine.getVassalRepository();
 		SalvoGamePiecePaletteDal salvoGamePiecePaletteDal = new SalvoGamePiecePaletteDalImpl(vassalRepository);
+		SalvoModuleMetaDataDal salvoModuleMetaDataDal = new SalvoModuleMetaDataDalImpl();
 
 		MyServerHandler.salvoToolbarMenuDal = new SalvoToolbarDalImpl(vassalRepository);
 		MyServerHandler.salvoMapDal = new SalvoMapDalImpl(vassalRepository);
 		MyServerHandler.vassalMapViewDal = new VassalMapViewDalImpl();
 		MyServerHandler.salvoTurnTrackerDal = new SalvoTurnTrackerDalImpl();
-		MyServerHandler.salvoGameStateDal = new SalvoGameStateDalImpl(MyServerHandler.salvoTurnTrackerDal, MyServerHandler.salvoMapDal, salvoGamePiecePaletteDal);
+		MyServerHandler.salvoGameStateDal = new SalvoGameStateDalImpl(salvoModuleMetaDataDal, MyServerHandler.salvoTurnTrackerDal, MyServerHandler.salvoMapDal, salvoGamePiecePaletteDal);
 		MyServerHandler.salvoChatDal = new SalvoChatDalImpl();
 	}
 	public enum Actions {
@@ -58,7 +61,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
 		GET_SALVOMAP_BY_ID ("GET_SALVOMAP_BY_ID", new CommandGetSalvoMapById(vassalEngine, salvoMapDal)),
 		POST_LEFT_DOUBLE_CLICK ("POST_LEFT_DOUBLE_CLICK", new CommandPostLeftDoubleClick(vassalEngine, salvoMapDal, vassalMapViewDal, mouse)),
 		POST_TURNTRACKER ("POST_TURNTRACKER", new CommandPostTurnTracker(vassalEngine, salvoTurnTrackerDal)),
-		GET_TOOLBARS ("GET_TOOLBARS", new CommandGetMainToolbar(vassalEngine, salvoMapDal)),
+		GET_TOOLBARS ("GET_TOOLBARS", new CommandGetMainToolbar(vassalEngine)),
 		GET_CHATS ("GET_CHATS", new CommandGetChats(vassalEngine, salvoChatDal));
 
 		Actions (String value, Command command) {

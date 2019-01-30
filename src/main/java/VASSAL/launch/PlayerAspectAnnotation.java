@@ -1,4 +1,4 @@
-package com.ethaneldridge.salvo.aspect;
+package VASSAL.launch;
 
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;

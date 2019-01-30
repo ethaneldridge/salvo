@@ -1,4 +1,4 @@
-package com.ethaneldridge.salvo.aspect;
+package VASSAL.build.module;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;

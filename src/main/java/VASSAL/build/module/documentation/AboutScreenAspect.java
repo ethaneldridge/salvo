@@ -1,4 +1,4 @@
-package com.ethaneldridge.salvo.aspect;
+package VASSAL.build.module.documentation;
 
 import java.io.File;
 
