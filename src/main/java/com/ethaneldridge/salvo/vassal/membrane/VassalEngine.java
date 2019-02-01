@@ -3,6 +3,8 @@ package com.ethaneldridge.salvo.vassal.membrane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import com.ethaneldridge.salvo.vassal.membrane.repository.impl.VassalRepositoryImpl;
+
 import VASSAL.build.GameModule;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -17,11 +19,12 @@ public class VassalEngine {
 		// Only access is via singleton
 	}
 
-	public void setSalvoGameStateDal() {
-	}
-
 	public static VassalEngine theVassalEngine() {
 		return theVassalEngine;
+	}
+
+	public VassalRepository getVassalRepository() {
+		return vassalRepository;
 	}
 
 	void launch() {
@@ -45,11 +48,18 @@ public class VassalEngine {
 			}
 		}
 		try {
-			startConnectionThread(port);
+			onVassalReady(port);
 		} catch (Exception e) {
 			// FIXME proper handling of exception
 			e.printStackTrace();
 		}
+	}
+
+	private void onVassalReady(int port) throws Exception {
+		// Only possible once the vassal is running
+// FIXME: Dead code?		vassalRepository.loadCache();
+		vassalRepository.validate();
+		startConnectionThread(port);
 	}
 
 	public synchronized boolean isStateReady() {
@@ -109,9 +119,12 @@ public class VassalEngine {
 		}
 	}
 
-	private static VassalEngine theVassalEngine = new VassalEngine();
 	private final Object lock = new Object();
 	private boolean isVassalReady = false;
 	private int expectedClicks = 0;
 	private int receivedClicks = 0;
+	private VassalRepository vassalRepository = new VassalRepositoryImpl();
+	
+	private static VassalEngine theVassalEngine = new VassalEngine();
+
 }

@@ -43,6 +43,13 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 		this.contents = contents;
 	}
 
+	public String getTooltip() {
+		return tooltip;
+	}
+	public void setTooltip(String tooltip) {
+		this.tooltip = tooltip;
+	}
+
 	// You might think this would be better as part of the hierarchy, and you would be right.
 	// I'm doing in this way so that it is easier to manage in JavaScript.
 	// Or, easier for me because right now, I'm honestly not comfortable with OO design in javascript.
@@ -61,6 +68,7 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 	private String name;
 	private String width;
 	private String height;
+	private String tooltip;
 	private List<SalvoGameElement> contents; // Could be a SalvoGamePiecePalette or a SalvoGamePiece
 
 	@Override
@@ -71,6 +79,7 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 		result = prime * result + ((height == null) ? 0 : height.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((tooltip == null) ? 0 : tooltip.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((width == null) ? 0 : width.hashCode());
 		return result;
@@ -103,6 +112,11 @@ public class SalvoGamePiecePalette implements SalvoGameElement {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (tooltip == null) {
+			if (other.tooltip != null)
+				return false;
+		} else if (!tooltip.equals(other.tooltip))
 			return false;
 		if (type != other.type)
 			return false;

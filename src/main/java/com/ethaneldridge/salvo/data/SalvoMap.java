@@ -35,13 +35,19 @@ public class SalvoMap {
 		this.pieces = pieces;
 	}
 
-	private static final String MAIN_MAP_ID = "Map0";
+	public SalvoToolbar getSalvoToolbar() {
+		return salvoToolbar;
+	}
+	public void setSalvoToolbar(SalvoToolbar salvoToolbar) {
+		this.salvoToolbar = salvoToolbar;
+	}
 
 	private String id;
 	private String name;
 	private String imageName;
 	private double zoom;
 	private List<SalvoGamePiece> pieces;
+	private SalvoToolbar salvoToolbar;
 	
 	@Override
 	public int hashCode() {
@@ -51,6 +57,7 @@ public class SalvoMap {
 		result = prime * result + ((imageName == null) ? 0 : imageName.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((pieces == null) ? 0 : pieces.hashCode());
+		result = prime * result + ((salvoToolbar == null) ? 0 : salvoToolbar.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(zoom);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -84,6 +91,11 @@ public class SalvoMap {
 			if (other.pieces != null)
 				return false;
 		} else if (!pieces.equals(other.pieces))
+			return false;
+		if (salvoToolbar == null) {
+			if (other.salvoToolbar != null)
+				return false;
+		} else if (!salvoToolbar.equals(other.salvoToolbar))
 			return false;
 		if (Double.doubleToLongBits(zoom) != Double.doubleToLongBits(other.zoom))
 			return false;

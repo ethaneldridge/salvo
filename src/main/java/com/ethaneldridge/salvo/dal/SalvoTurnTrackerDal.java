@@ -1,8 +1,8 @@
 package com.ethaneldridge.salvo.dal;
 
-import VASSAL.build.module.turn.SalvoTurnTracker;
+import VASSAL.build.module.turn.VassalSalvoTurnTracker;
 
 public interface SalvoTurnTrackerDal {
 
-	public SalvoTurnTracker getSalvoTurnTracker();
+	public VassalSalvoTurnTracker getSalvoTurnTracker();
 }

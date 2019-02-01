@@ -8,11 +8,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ethaneldridge.salvo.dal.SalvoGamePieceDal;
 import com.ethaneldridge.salvo.dal.SalvoGamePiecePaletteDal;
 import com.ethaneldridge.salvo.data.SalvoGameElement;
 import com.ethaneldridge.salvo.data.SalvoGamePiece;
 import com.ethaneldridge.salvo.data.SalvoGamePiecePalette;
+import com.ethaneldridge.salvo.vassal.membrane.VassalRepository;
 
 import VASSAL.build.Buildable;
 import VASSAL.build.GameModule;
@@ -28,8 +28,8 @@ import VASSAL.counters.PieceCloner;
 
 public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 
-	public SalvoGamePiecePaletteDalImpl(SalvoGamePieceDal salvoGamePieceDal) {
-		this.salvoGamePieceDal = salvoGamePieceDal;
+	public SalvoGamePiecePaletteDalImpl(VassalRepository vassalRepository) {
+		this.vassalRepository = vassalRepository;
 	}
 	@Override
 	public List<SalvoGameElement> searchAll() {
@@ -55,7 +55,7 @@ public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 
 			GamePiece gamePiece = PieceCloner.getInstance().clonePiece(pieceSlot.getPiece());
 			Point offset = new Point(0,0);
-			SalvoGamePiece salvoGamePiece = salvoGamePieceDal.getSalvoGamePieceFromVassalGamePiece(gamePiece, offset);
+			SalvoGamePiece salvoGamePiece = vassalRepository.getSalvoGamePieceFromVassalGamePiece(gamePiece, offset);
 			String salvoGamePieceMapId = String.format("%s%s",SalvoGamePiecePalette.Type.PIECE_SLOT, pieceSlot.getGpId());
 			salvoGamePiece.getLocationNew().setSalvoMapId(salvoGamePieceMapId);
 
@@ -77,7 +77,9 @@ public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 			} else if (widget instanceof ListWidget) {
 				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.LIST_WIDGET);
 			} else if (widget instanceof PieceWindow) {
+				PieceWindow pieceWindow = (PieceWindow)widget;
 				salvoGamePiecePalette.setType(SalvoGamePiecePalette.Type.PIECE_WINDOW);
+				salvoGamePiecePalette.setTooltip(pieceWindow.getAttributeValueString(PieceWindow.TOOLTIP));
 			} else {
 				logger.warn("Unknown type of widget");
 			}
@@ -103,6 +105,6 @@ public class SalvoGamePiecePaletteDalImpl implements SalvoGamePiecePaletteDal {
 		return salvoGameElements;
 	}
 
-	private SalvoGamePieceDal salvoGamePieceDal;
+	private VassalRepository vassalRepository;
 	private static final Logger logger = LoggerFactory.getLogger(SalvoGamePiecePaletteDalImpl.class);
 }

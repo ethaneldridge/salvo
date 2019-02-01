@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.ethaneldridge.salvo.data.SalvoPoint;
-import com.ethaneldridge.salvo.vassal.membrane.command.SalvoDoubleClick;
+import com.ethaneldridge.salvo.vassal.membrane.command.SalvoLeftDoubleClick;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SalvoDoubleClickTest {
@@ -16,7 +16,7 @@ public class SalvoDoubleClickTest {
 	public void test() throws IOException {
 		SalvoPoint salvoPoint = new SalvoPoint(0, 0);
 
-		SalvoDoubleClick salvoDoubleClick = new SalvoDoubleClick();
+		SalvoLeftDoubleClick salvoDoubleClick = new SalvoLeftDoubleClick();
 		salvoDoubleClick.setSalvoPoint(salvoPoint);
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -24,7 +24,7 @@ public class SalvoDoubleClickTest {
 		String salvoDoubleClickJson = objectMapper.writeValueAsString(salvoDoubleClick);
 		System.out.println(salvoDoubleClickJson);
 
-		SalvoDoubleClick bean = objectMapper.readValue(salvoDoubleClickJson, SalvoDoubleClick.class);
+		SalvoLeftDoubleClick bean = objectMapper.readValue(salvoDoubleClickJson, SalvoLeftDoubleClick.class);
 
 		assertEquals(salvoDoubleClick, bean);
 	}

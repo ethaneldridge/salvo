@@ -2,7 +2,7 @@ package com.ethaneldridge.salvo.data;
 
 import java.util.List;
 
-import VASSAL.build.module.turn.SalvoTurnTracker;
+import VASSAL.build.module.turn.VassalSalvoTurnTracker;
 
 public class SalvoGameState {
 
@@ -10,17 +10,18 @@ public class SalvoGameState {
 		// Required for Jackson instantiation
 	}
 
-	public SalvoGameState(SalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
+	public SalvoGameState(SalvoModuleMetaData salvoModuleMetaData, VassalSalvoTurnTracker salvoTurnTracker, List<SalvoMap> salvoMapAll, List<SalvoGameElement> salvoGamePiecePalettes) {
+		this.salvoModuleMetaData = salvoModuleMetaData;
 		this.salvoTurnTracker = salvoTurnTracker;
 		this.salvoMaps = salvoMapAll;
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
 	}
 
-	public SalvoTurnTracker getSalvoTurnTracker() {
+	public VassalSalvoTurnTracker getSalvoTurnTracker() {
 		return salvoTurnTracker;
 	}
 
-	public void setSalvoTurnTracker(SalvoTurnTracker salvoTurnTracker) {
+	public void setSalvoTurnTracker(VassalSalvoTurnTracker salvoTurnTracker) {
 		this.salvoTurnTracker = salvoTurnTracker;
 	}
 
@@ -40,7 +41,16 @@ public class SalvoGameState {
 		this.salvoGamePiecePalettes = salvoGamePiecePalettes;
 	}
 
-	private SalvoTurnTracker salvoTurnTracker;
+	public SalvoModuleMetaData getSalvoModuleMetaData() {
+		return salvoModuleMetaData;
+	}
+
+	public void setSalvoModuleMetaData(SalvoModuleMetaData salvoModuleMetaData) {
+		this.salvoModuleMetaData = salvoModuleMetaData;
+	}
+
+	private SalvoModuleMetaData salvoModuleMetaData;
+	private VassalSalvoTurnTracker salvoTurnTracker;
 	private List<SalvoMap> salvoMaps;
 	private List<SalvoGameElement> salvoGamePiecePalettes;
 	
@@ -50,6 +60,7 @@ public class SalvoGameState {
 		int result = 1;
 		result = prime * result + ((salvoGamePiecePalettes == null) ? 0 : salvoGamePiecePalettes.hashCode());
 		result = prime * result + ((salvoMaps == null) ? 0 : salvoMaps.hashCode());
+		result = prime * result + ((salvoModuleMetaData == null) ? 0 : salvoModuleMetaData.hashCode());
 		result = prime * result + ((salvoTurnTracker == null) ? 0 : salvoTurnTracker.hashCode());
 		return result;
 	}
@@ -72,6 +83,11 @@ public class SalvoGameState {
 			if (other.salvoMaps != null)
 				return false;
 		} else if (!salvoMaps.equals(other.salvoMaps))
+			return false;
+		if (salvoModuleMetaData == null) {
+			if (other.salvoModuleMetaData != null)
+				return false;
+		} else if (!salvoModuleMetaData.equals(other.salvoModuleMetaData))
 			return false;
 		if (salvoTurnTracker == null) {
 			if (other.salvoTurnTracker != null)
